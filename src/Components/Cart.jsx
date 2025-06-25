@@ -31,7 +31,7 @@ const Cart = () => {
   return (
     <div className='container-fluid cart'>
       <div className="text-center m-0 shadow-sm p-3">
-        <span className="bg-danger-subtle px-2 py-1 rounded">Cart</span> -------------- <span>Address</span> ------------- <span>Payment</span>
+        <span className="bg-danger-subtle px-2 py-1 rounded">Cart</span> ------------- <span>Address</span> ------------ <span>Payment</span>
       </div>
 
       <div className="container">
