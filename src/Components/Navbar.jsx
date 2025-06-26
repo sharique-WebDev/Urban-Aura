@@ -63,8 +63,18 @@ const Navbar = () => {
             <nav ref={navRef} className="navbar navbar-expand-lg navbar-dark bg-dark p-lg-2 p-1 position-fixed w-100 z-3">
                 <div className="container-fluid">
                     <Link className="navbar-brand" to="/"><img src={Logo} alt="Logo" /></Link>
+<span className="position-relative ms-auto me-3 cart-btn d-lg-none d-block" onClick={() => navigate('/cart')}>
+                    <FaShoppingCart className=" fs-5" />
+                            {cartCount > 0 && (
+                                <span
+                                    className="position-absolute rounded-circle text-white bg-danger small"
+                                    style={{ top: '-9px', left: '10px', padding: '0px 7px' }}
+                                >
+                                    {cartCount}
+                                </span>
+                            )}
 
-                    <FaShoppingCart className="d-lg-none d-block fs-4 ms-auto me-3 cart-btn" onClick={() => navigate('/cart')} />
+                        </span>
 
                     <button
                         ref={togglerRef}
@@ -102,8 +112,8 @@ const Navbar = () => {
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                             <FaSearch className="position-absolute" />
                         </form>
-                        <span className="position-relative cart-btn" onClick={() => navigate('/cart')}>
-                            <FaShoppingCart className="d-lg-block d-none fs-4 me-3" />
+                        <span className="position-relative cart-btn d-lg-block d-none " onClick={() => navigate('/cart')}>
+                            <FaShoppingCart className="fs-4 me-3" />
                             {cartCount > 0 && (
                                 <span
                                     className="position-absolute rounded-circle text-white bg-danger small"
