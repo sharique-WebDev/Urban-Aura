@@ -1,11 +1,20 @@
 import React from 'react';
-import { HiOutlineX } from 'react-icons/hi'
+import { HiOutlineX, HiPlus, HiMinus } from 'react-icons/hi';
 
 const CartItem = (props) => {
+  const handleDecrease = () => {
+    if (props.qty > 1) {
+      props.onDecrease(props.id);
+    }
+  };
+
+  const handleIncrease = () => {
+    props.onIncrease(props.id);
+  };
+
   return (
     <div className="card my-4 shadow-sm border">
       <div className="row g-0 align-items-center">
-        {/* Product Image */}
         <div className="col-md-3 col-4">
           <img
             src={props.img}
@@ -14,35 +23,44 @@ const CartItem = (props) => {
             style={{
               width: '100%',
               aspectRatio: '1/1',
-              objectFit: 'cover'
+              objectFit: 'cover',
             }}
           />
         </div>
 
-        {/* Product Details */}
         <div className="col-md-9 col-8">
           <div className="card-body py-3">
             <div className="d-flex justify-content-between">
-            <h6 className="card-title mb-2 text-uppercase fw-normal">
-              {props.name || "Mens Cotton T-Shirt"}
-            </h6>
-<HiOutlineX
-  className="rounded-circle bg-secondary-subtle text-muted p-1 fs-4"
-  style={{ cursor: 'pointer' }}
-  onClick={() => props.onRemove(props.id)}
-/>
-
+              <h6 className="card-title mb-2 text-uppercase fw-normal">
+                {props.name}
+              </h6>
+              <HiOutlineX
+                className="rounded-circle bg-secondary-subtle text-muted p-1 fs-4"
+                style={{ cursor: 'pointer' }}
+                onClick={() => props.onRemove(props.id)}
+              />
             </div>
+
             <p className="card-text small text-muted mb-3">
-              {props.description || "Lightweight cotton t-shirt for summer season"}
+              {props.description}
             </p>
 
             <div className="d-flex flex-wrap align-items-center gap-2">
-              <span className="badge bg-secondary px-3 py-2 fs-6 fw-normal rounded-1">
-                Qty: {props.qty || 1}
-              </span>
+              <div className="d-flex align-items-center border rounded px-2 py-1 bg-secondary text-white">
+                
+                <HiMinus 
+                  style={{cursor:'pointer'}}
+                  onClick={handleDecrease}
+                />
+                <span className="mx-2">{props.qty}</span>
+                
+                <HiPlus
+                  style={{cursor:'pointer'}}
+                  onClick={handleIncrease}
+                />
+              </div>
               <span className="text-dark fw-semibold">
-                Price: ₹{props.price || 6770}
+                Price: ₹{props.price * props.qty}
               </span>
             </div>
           </div>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import Logo from '../Assets/brand-logo.png';
 import { FaSearch, FaShoppingCart, FaBars } from 'react-icons/fa';
@@ -33,6 +33,30 @@ const Navbar = () => {
             togglerRef.current.click();
         }
     };
+
+    const [cartCount, setCartCount] = useState(0);
+
+    // Load cart count on mount
+    useEffect(() => {
+  const updateCartCount = () => {
+    const savedCart = JSON.parse(localStorage.getItem('cart')) || [];
+    const totalItems = savedCart.reduce((sum, item) => sum + item.qty, 0);
+    setCartCount(totalItems);
+  };
+
+  updateCartCount();
+
+  // Listen to custom and cross-tab updates
+  window.addEventListener('storage', updateCartCount);
+  window.addEventListener('cart-updated', updateCartCount); // ✅ Add this
+
+  return () => {
+    window.removeEventListener('storage', updateCartCount);
+    window.removeEventListener('cart-updated', updateCartCount); // ✅ Clean up
+  };
+}, []);
+
+
 
     return (
         <>
@@ -78,8 +102,18 @@ const Navbar = () => {
                             <input className="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
                             <FaSearch className="position-absolute" />
                         </form>
+                        <span className="position-relative cart-btn" onClick={() => navigate('/cart')}>
+                            <FaShoppingCart className="d-lg-block d-none fs-4 me-3" />
+                            {cartCount > 0 && (
+                                <span
+                                    className="position-absolute rounded-circle text-white bg-danger small"
+                                    style={{ top: '-10px', right: '2px', padding: '0px 7px' }}
+                                >
+                                    {cartCount}
+                                </span>
+                            )}
 
-                        <FaShoppingCart className="d-lg-block d-none fs-5 me-3 cart-btn" onClick={() => navigate('/cart')} />
+                        </span>
                     </div>
                 </div>
             </nav>

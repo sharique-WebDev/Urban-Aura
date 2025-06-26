@@ -66,8 +66,8 @@ input[type="number"] {
     cursor: pointer;
 }
 
-.cart-btn:hover{
-    transform: rotate(-0.015turn) scale(1.2);
+.cart-btn:active{
+    transform: scale(0.9);
 }
 
 .category-items .card-img {

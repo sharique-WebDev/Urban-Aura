@@ -5,29 +5,32 @@ const MoreProdCard = (props) => {
   const navigate = useNavigate();
 
   const handleAddToCart = () => {
-    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    const productIndex = existingCart.findIndex(item => item.id === props.id);
+  const productIndex = existingCart.findIndex(item => item.id === props.id);
 
-    if(productIndex !== -1){
-      existingCart[productIndex].qty += 1;
-    } else {
-      const newItem = {
-        id: props.id,
-        image: props.image,
-        name: props.name,
-        description: props.description || "No description available",
-        price: props.newPrice,
-        qty: 1
-      };
-      existingCart.push(newItem);
-    }
+  if (productIndex !== -1) {
+    existingCart[productIndex].qty += 1;
+  } else {
+    const newItem = {
+      id: props.id,
+      image: props.image,
+      name: props.name,
+      description: props.description || "No description available",
+      price: props.newPrice,
+      qty: 1
+    };
+    existingCart.push(newItem);
+  }
 
+  localStorage.setItem('cart', JSON.stringify(existingCart));
 
-    localStorage.setItem('cart', JSON.stringify(existingCart));
-    alert(`${props.name} added to cart 🛒`);
-    navigate('/cart');
-  };
+  // ✅ Dispatch event to update Navbar cart count
+  window.dispatchEvent(new Event('cart-updated'));
+
+  alert(`${props.name} added to cart 🛒`);
+};
+
 
   return (
     <div className={`card product-card`}>

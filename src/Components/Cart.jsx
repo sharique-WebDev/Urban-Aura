@@ -20,9 +20,29 @@ const Cart = () => {
     const updatedCart = cartItems.filter(item => item.id !== id);
     setCartItems(updatedCart);
     localStorage.setItem('cart', JSON.stringify(updatedCart));
+    window.dispatchEvent(new Event('cart-updated')); // ✅ Notify Navbar
   };
 
-  // Total MRP and amount
+  // Handle increase
+  const handleIncreaseQty = (id) => {
+    const updated = cartItems.map(item =>
+      item.id === id ? { ...item, qty: item.qty + 1 } : item
+    );
+    setCartItems(updated);
+    localStorage.setItem('cart', JSON.stringify(updated));
+    window.dispatchEvent(new Event('cart-updated'));
+  };
+
+  // Handle decrease
+  const handleDecreaseQty = (id) => {
+    const updated = cartItems.map(item =>
+      item.id === id && item.qty > 1 ? { ...item, qty: item.qty - 1 } : item
+    );
+    setCartItems(updated);
+    localStorage.setItem('cart', JSON.stringify(updated));
+    window.dispatchEvent(new Event('cart-updated'));
+  };
+
   const totalMRP = cartItems.reduce((acc, item) => acc + item.price * item.qty, 0);
   const discount = cartItems.length * 10;
   const platformFee = cartItems.length > 0 ? 20 : 0;
@@ -31,19 +51,18 @@ const Cart = () => {
   return (
     <div className='container-fluid cart'>
       <div className="text-center m-0 shadow-sm p-3">
-        <span className="bg-danger-subtle px-2 py-1 rounded">Cart</span> ------------ <span>Address</span> ----------- <span>Payment</span>
+        <span className="bg-primary-subtle px-2 py-1 rounded-1">Cart</span> ------------ <span>Address</span> ----------- <span>Payment</span>
       </div>
 
       <div className="container">
         <div className="row">
-          {/* LEFT SIDE: ITEMS */}
           <div className="col-lg-7">
             {cartItems.length === 0 ? (
               <p className="text-muted my-4">🛒 Your cart is empty.</p>
             ) : (
-              cartItems.map((item, idx) => (
+              cartItems.map(item => (
                 <CartItem
-                  key={idx}
+                  key={item.id}
                   id={item.id}
                   img={item.image}
                   name={item.name}
@@ -51,12 +70,13 @@ const Cart = () => {
                   price={item.price}
                   qty={item.qty}
                   onRemove={handleRemoveItem}
+                  onIncrease={handleIncreaseQty}
+                  onDecrease={handleDecreaseQty}
                 />
               ))
             )}
           </div>
 
-          {/* RIGHT SIDE: SUMMARY */}
           <div className="col-lg-5 my-4">
             <h6 className='text-muted'>PRICE DETAILS ({cartItems.length} ITEM{cartItems.length !== 1 ? 'S' : ''})</h6>
             <p className="text-muted d-flex justify-content-between my-1">

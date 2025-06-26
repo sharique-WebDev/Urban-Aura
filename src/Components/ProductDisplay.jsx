@@ -10,28 +10,32 @@ const ProductDisplay = ({ product }) => {
   const [selectedSize, setSelectedSize] = useState(30);
 
   const handleAddToCart = () => {
-    const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existingCart = JSON.parse(localStorage.getItem('cart')) || [];
 
-    const productIndex = existingCart.findIndex(item => item.id === product.id);
+  const productIndex = existingCart.findIndex(item => item.id === product.id);
 
-    if (productIndex !== -1) {
-      existingCart[productIndex].qty += 1;
-    } else {
-      const newItem = {
-        id: product.id,
-        image: product.image,
-        name: product.name,
-        description: product.description || "No description available",
-        price: product.newPrice,
-        qty: 1
-      };
-      existingCart.push(newItem);
-    }
+  if (productIndex !== -1) {
+    existingCart[productIndex].qty += 1;
+  } else {
+    const newItem = {
+      id: product.id,
+      image: product.image,
+      name: product.name,
+      description: product.description || "No description available",
+      price: product.newPrice,
+      qty: 1
+    };
+    existingCart.push(newItem);
+  }
 
-    localStorage.setItem('cart', JSON.stringify(existingCart));
-    alert(`${product.name} added to cart 🛒`);
-    navigate('/cart');
-  };
+  localStorage.setItem('cart', JSON.stringify(existingCart));
+
+  // ✅ Dispatch custom event so Navbar updates immediately
+  window.dispatchEvent(new Event('cart-updated'));
+
+  alert(`${product.name} added to cart 🛒`);
+};
+
 
   const handleBuyNow = () => {
     navigate(`/checkout/${product.id}`);
